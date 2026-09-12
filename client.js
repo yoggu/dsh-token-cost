@@ -102,14 +102,14 @@ window.__ModuleLoader__.load({
         return () => window.clearInterval(handle)
       }, [sessionId])
 
-      const incomplete = state !== null && (state.pending > 0 || state.estimated > 0)
       return React.createElement(
         'span',
         {
           title: state === null ? `dsh-cost-pill: ${note}` : detail(state),
           // Mirrors the shipped usage pill's own rule: the row's small label
-          // size and muted colour on one nowrap line, so this reads as a
-          // sibling cell of that row rather than a second block.
+          // size and muted colour on one nowrap line. The completeness of the
+          // amount is carried by the marker and the tooltip, not by a word
+          // beside the number.
           style: {
             alignItems: 'center',
             boxSizing: 'border-box',
@@ -126,9 +126,6 @@ window.__ModuleLoader__.load({
           },
         },
         state === null ? '$—' : marker(state) + usd(state.usd),
-        incomplete
-          ? React.createElement('span', { style: { opacity: 0.6 } }, 'est.')
-          : null,
       )
     }
 
