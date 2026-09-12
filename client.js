@@ -105,29 +105,38 @@ window.__ModuleLoader__.load({
       return React.createElement(
         'span',
         {
+          className: CLASS_NAME,
           title: state === null ? `dsh-cost-pill: ${note}` : detail(state),
-          // Mirrors the shipped usage pill's own rule: the row's small label
-          // size and muted colour on one nowrap line. The completeness of the
-          // amount is carried by the marker and the tooltip, not by a word
-          // beside the number.
+          // Only the completeness opacity is dynamic; everything else lives in
+          // the stylesheet, because an inline `display` would outrank the rules
+          // that take the readout out of a row too narrow to hold it.
           style: {
-            alignItems: 'center',
-            boxSizing: 'border-box',
-            color: 'var(--dsw-alias-label-tertiary, inherit)',
-            display: 'inline-flex',
-            flex: '0 0 auto',
-            font: 'var(--dsw-font-xs-13, inherit)',
-            fontVariantNumeric: 'tabular-nums',
-            gap: '4px',
-            lineHeight: '1.2',
-            maxWidth: '100%',
             opacity: state === null ? 0.5 : state.unpriced > 0 ? 0.75 : 1,
-            whiteSpace: 'nowrap',
           },
         },
         state === null ? '$—' : marker(state) + usd(state.usd),
       )
     }
+
+    /** Stable class the readout's stylesheet and its width rules address. */
+    const CLASS_NAME = 'dsh-cost-pill'
+
+    /**
+     * The readout's stylesheet.
+     *
+     * The composer's tool row wraps once it runs out of width, and a wrapped
+     * row puts the send control on a line of its own — the readout is worth
+     * less than the controls it displaces, so it steps aside instead. The
+     * container query answers for the composer's own width, which is what
+     * actually runs out; the viewport query covers a container the query
+     * cannot see, such as a phone whose composer is not an inline-size
+     * container.
+     */
+    const STYLESHEET = `
+.dsh-cost-pill{display:inline-flex;align-items:center;box-sizing:border-box;max-width:100%;flex:0 0 auto;gap:4px;white-space:nowrap;color:var(--dsw-alias-label-tertiary,inherit);font:var(--dsw-font-xs-13,inherit);font-variant-numeric:tabular-nums;line-height:1.2}
+@container (width<=620px){.dsh-cost-pill{display:none}}
+@media (max-width:700px){.dsh-cost-pill{display:none}}
+`
 
     /**
      * Register the readout among the composer's compact controls.
@@ -140,6 +149,13 @@ window.__ModuleLoader__.load({
      * @param ctx - the plugin's Cordis context.
      */
     function apply(ctx) {
+      ctx.effect(() => {
+        const style = document.createElement('style')
+        style.dataset.plugin = CLASS_NAME
+        style.textContent = STYLESHEET
+        document.head.appendChild(style)
+        return () => style.remove()
+      })
       ctx.slots.inject('conversation.input.right', () => ctx.slots.register({
         name: 'conversation.input.right',
         id: 'cost',
