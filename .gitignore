@@ -1,0 +1,23 @@
+# Peer-Symlinks auf den Harness-Baum. Sie sind maschinenspezifisch — ein
+# Checkout braucht eigene Links auf $DSH_HOME/profiles/node_modules, niemals
+# committen.
+node_modules/
+
+# Laufzeit- und Debug-Artefakte
+*.log
+*.tmp
+.cache/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Der OpenRouter-Schlüssel liegt absichtlich NICHT hier, sondern im
+# Credential-Store des Harness ($DSH_HOME/.credentials.yaml, 0600). Diese
+# Zeilen sind nur ein Sicherheitsnetz, falls ihn jemand versehentlich
+# hierher kopiert.
+*.credentials.yaml
+credentials*.json
+.env
+.env.*

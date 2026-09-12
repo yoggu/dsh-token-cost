@@ -1,0 +1,12 @@
+# dsh-cost-pill bundle layer.
+#
+# One host row. It reads the durable Session event feed, prices each settled
+# Assistant message, and serves the running total to its own browser half on an
+# exact HTTP route.
+#
+# No API key appears here. The OpenRouter key is resolved per lookup through
+# `ctx.credentials.resolve('OPENROUTER_API_KEY')` and handed to `curl` in the
+# child process environment, never on a command line.
+- insert:
+    - id: cost-pill
+      name: 'dsh-cost-pill'
