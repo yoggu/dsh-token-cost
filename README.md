@@ -64,10 +64,10 @@ amount is an estimate at published list price rather than a billed charge.
   is chosen by directory order, so a route cannot be priced from an unrelated
   provider that happens to sort first.
 - A route is a deployment's own name, while a catalog names the provider that
-  serves it: this deployment's ChatGPT route is `codex-personal`, priced by
-  `openai-codex`. That binding lives in the plugin that owns the route, not in
-  the durable log the pill reads, so the pill states it explicitly in
-  `CATALOG_PROVIDER_BY_ROUTE`. A route missing from that table is priced only
+  serves it: this deployment's ChatGPT routes `codex-personal` and
+  `codex-business` are both priced by `openai-codex`. That binding lives in the
+  plugin that owns the route, not in the durable log the pill reads, so the pill
+  states it explicitly in `CATALOG_PROVIDER_BY_ROUTE`. A route missing from that table is priced only
   when its name is already a catalog provider name (`openrouter` is), and is
   otherwise left unpriced and counted as a lower bound — the same answer the
   coding agent gives for a custom provider it has no catalog entry for.
