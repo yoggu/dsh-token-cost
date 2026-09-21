@@ -11,7 +11,7 @@ Three sources, in descending order of authority:
 | --- | --- | --- |
 | OpenRouter generation record | one lookup per generation, each done once | the amount actually billed |
 | OpenRouter live model rates | one refresh per model every five minutes | an estimate, used until the lookup settles |
-| Published list price from the installed pi-ai catalogs | read once, no requests | an estimate for routes OpenRouter does not serve |
+| Published list price from the installed pi-ai catalogs | read once, no requests | an estimate for routes OpenRouter does not serve, priced from the provider that owns the route |
 
 The generation record is authoritative because the provider settles it: it names
 the upstream provider that served the request and the exact charge. A generation
@@ -57,3 +57,17 @@ amount is an estimate at published list price rather than a billed charge.
 - List prices come from the installed pi-ai catalogs, found by searching upward
   from the running CLI. `DSH_PI_AI_DATA` overrides that search. With no catalog
   found, non-OpenRouter routes are simply unpriced.
+- One model id is described by many catalog files, because the same model is
+  served by OpenAI, Azure, Copilot, OpenCode, and every gateway in between. The
+  catalogs are therefore indexed the way pi-ai publishes them — by provider,
+  then by model id — and a route reaches only its own provider's file. Nothing
+  is chosen by directory order, so a route cannot be priced from an unrelated
+  provider that happens to sort first.
+- A route is a deployment's own name, while a catalog names the provider that
+  serves it: this deployment's ChatGPT route is `codex-personal`, priced by
+  `openai-codex`. That binding lives in the plugin that owns the route, not in
+  the durable log the pill reads, so the pill states it explicitly in
+  `CATALOG_PROVIDER_BY_ROUTE`. A route missing from that table is priced only
+  when its name is already a catalog provider name (`openrouter` is), and is
+  otherwise left unpriced and counted as a lower bound — the same answer the
+  coding agent gives for a custom provider it has no catalog entry for.
