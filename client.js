@@ -1,5 +1,5 @@
 /**
- * Browser half of `dsh-cost-pill`: one pill beside the token-usage pill at the
+ * Browser half of `dsh-token-cost-estimate`: one pill beside the token-usage pill at the
  * bottom of the conversation.
  *
  * Hand-written in the `window.__ModuleLoader__.load` format — no JSX, no
@@ -10,11 +10,11 @@
  * It never computes a price itself: the host applies pi-ai's published model
  * rates and reports whether any steps could not be priced.
  *
- * @module dsh-cost-pill/client
+ * @module dsh-token-cost-estimate/client
  */
 
 window.__ModuleLoader__.load({
-  id: 'dsh-cost-pill',
+  id: 'dsh-token-cost-estimate',
   factory: (require) => {
     const module = { exports: {} }
     const exports = module.exports
@@ -22,7 +22,10 @@ window.__ModuleLoader__.load({
 
     const React = require('react')
 
-    /** Exact route the host half registers for this package. */
+    /**
+     * Legacy route retained for runtime compatibility with deployed host bundles.
+     * The package-facing identity is dsh-token-cost-estimate.
+     */
     const ROUTE = '/api/dsh-cost-pill'
 
     /** How often the pill re-reads the host's answer. */
@@ -89,7 +92,7 @@ window.__ModuleLoader__.load({
         'span',
         {
           className: CLASS_NAME,
-          title: state === null ? `dsh-cost-pill: ${note}` : detail(state),
+          title: state === null ? `dsh-token-cost-estimate: ${note}` : detail(state),
           // Only the completeness opacity is dynamic; everything else lives in
           // the stylesheet, because an inline `display` would outrank the rules
           // that take the readout out of a row too narrow to hold it.
@@ -102,7 +105,7 @@ window.__ModuleLoader__.load({
     }
 
     /** Stable class the readout's stylesheet and its width rules address. */
-    const CLASS_NAME = 'dsh-cost-pill'
+    const CLASS_NAME = 'dsh-token-cost-estimate'
 
     /**
      * The readout's stylesheet.
@@ -116,9 +119,9 @@ window.__ModuleLoader__.load({
      * container.
      */
     const STYLESHEET = `
-.dsh-cost-pill{display:inline-flex;align-items:center;box-sizing:border-box;max-width:100%;flex:0 0 auto;gap:4px;white-space:nowrap;color:var(--dsw-alias-label-tertiary,inherit);font:var(--dsw-font-xs-13,inherit);font-variant-numeric:tabular-nums;line-height:1.2}
-@container (width<=620px){.dsh-cost-pill{display:none}}
-@media (max-width:700px){.dsh-cost-pill{display:none}}
+.dsh-token-cost-estimate{display:inline-flex;align-items:center;box-sizing:border-box;max-width:100%;flex:0 0 auto;gap:4px;white-space:nowrap;color:var(--dsw-alias-label-tertiary,inherit);font:var(--dsw-font-xs-13,inherit);font-variant-numeric:tabular-nums;line-height:1.2}
+@container (width<=620px){.dsh-token-cost-estimate{display:none}}
+@media (max-width:700px){.dsh-token-cost-estimate{display:none}}
 `
 
     /**

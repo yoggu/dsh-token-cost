@@ -1,7 +1,8 @@
-# dsh-cost-pill
+# dsh-token-cost-estimate
 
 Shows the current Session's estimated token cost, as a compact readout among the
-composer's tool-row controls. It follows the pi coding-agent style:
+composer's tool-row controls. The estimate comes from local pi-ai catalog prices;
+it is not a billed amount. It follows the pi coding-agent style:
 `$0.000` for a normal route and `$0.000 (sub)` for a subscription route.
 
 ## What it reports
@@ -25,7 +26,14 @@ routes involved, and whether the route is subscription-covered.
 | `$0.000` | no priced usage yet, or the priced usage rounds below $0.0005 |
 
 The amount is formatted to three decimal places to match the pi coding agent.
-Hover the pill for the exact interpretation and route details.
+Hover the pill for the exact interpretation and route details. The readout uses the
+`dsh-token-cost-estimate` CSS tag.
+
+## Runtime compatibility
+
+The package-facing identity is `dsh-token-cost-estimate`. The existing host/browser
+bundle id (`cost-pill`) and API route (`/api/dsh-cost-pill`) remain unchanged as
+runtime contracts, so already-deployed integrations continue to work.
 
 ## Requirements
 

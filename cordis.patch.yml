@@ -1,8 +1,9 @@
-# dsh-cost-pill bundle layer.
+# dsh-token-cost-estimate bundle layer.
 #
 # One host row. It reads the durable Session event feed, estimates each
 # Assistant message from the local pi-ai catalogs, and serves the running total
 # to its own browser half on an exact HTTP route.
+# The cost-pill bundle id is retained for runtime compatibility.
 - insert:
     - id: cost-pill
-      name: 'dsh-cost-pill'
+      name: 'dsh-token-cost-estimate'

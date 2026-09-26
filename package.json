@@ -1,8 +1,8 @@
 {
-  "name": "dsh-cost-pill",
+  "name": "dsh-token-cost-estimate",
   "version": "0.1.0",
   "private": true,
-  "description": "Pi coding-agent style estimate of the current Session's token cost, with subscription-route markers",
+  "description": "Estimated current-session token cost from local pi-ai catalog prices; not a billed amount",
   "type": "module",
   "license": "MIT",
   "main": "lib/index.js",
