@@ -2,7 +2,7 @@
   "name": "dsh-cost-pill",
   "version": "0.1.0",
   "private": true,
-  "description": "Running USD cost of the current Session, shown in its own pill beside the token-usage pill: OpenRouter's billed amount per generation when settled, live-rate estimates meanwhile",
+  "description": "Pi coding-agent style estimate of the current Session's token cost, with subscription-route markers",
   "type": "module",
   "license": "MIT",
   "main": "lib/index.js",

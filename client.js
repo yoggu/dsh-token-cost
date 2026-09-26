@@ -6,10 +6,9 @@
  * bundler — and declared through `exports["./client"]` plus `dsh.client` in
  * package.json, which is how the host discovers and serves a browser bundle.
  *
- * The pill reads its number from the exact route the host half registers. It
- * never computes a price itself: which steps are settled, which are estimated,
- * and which have no price at all is the host's answer, and the pill only marks
- * the difference so a lower bound is never read as a total.
+ * The pill reads its estimate from the exact route the host half registers.
+ * It never computes a price itself: the host applies pi-ai's published model
+ * rates and reports whether any steps could not be priced.
  *
  * @module dsh-cost-pill/client
  */
@@ -30,28 +29,16 @@ window.__ModuleLoader__.load({
     const POLL_MS = 2000
 
     /**
-     * Render a USD amount without ever rounding a real charge away.
-     * @param value - the amount in USD.
+     * Render the estimate like pi coding-agent: fixed three decimals and a
+     * subscription marker where the route is covered by a plan rather than a
+     * per-request account charge.
+     * @param value - the estimated amount in USD.
+     * @param subscription - whether the route is subscription-covered.
      * @returns the display string.
      */
-    function usd(value) {
-      if (!Number.isFinite(value) || value <= 0) return '$0.00'
-      for (let digits = 2; digits <= 6; digits += 1) {
-        const text = value.toFixed(digits)
-        if (Number(text) > 0) return `$${text}`
-      }
-      return '<$0.000001'
-    }
-
-    /**
-     * The prefix that states how complete the amount is.
-     * @param state - the host's report.
-     * @returns the marker, or an empty string for a settled total.
-     */
-    function marker(state) {
-      if (state.unpriced > 0) return '\u2265 '
-      if (state.pending > 0 || state.estimated > 0) return '\u2248 '
-      return ''
+    function usd(value, subscription) {
+      const amount = Number.isFinite(value) && value >= 0 ? value : 0
+      return `$${amount.toFixed(3)}${subscription ? ' (sub)' : ''}`
     }
 
     /**
@@ -60,14 +47,10 @@ window.__ModuleLoader__.load({
      * @returns the explanation.
      */
     function detail(state) {
-      const total = state.exact + state.estimated + state.unpriced
-      const parts = [`Billed cost from OpenRouter generation records (${state.exact} of ${total} steps settled)`]
-      if (state.pending > 0) parts.push(`${state.pending} still being looked up`)
-      const listed = state.listPrice ?? 0
-      const live = state.estimated - listed
-      if (live > 0) parts.push(`${live} currently estimated from live rates`)
-      if (listed > 0) parts.push(`${listed} estimated at published list price, not billed`)
-      if (state.unpriced > 0) parts.push(`${state.unpriced} unpriced, so this is a lower bound`)
+      const total = state.priced + state.unpriced
+      const parts = [`Estimated from pi-ai published list prices (${state.priced} of ${total} steps priced)`]
+      if (state.subscription) parts.push('subscription route; not an account charge')
+      if (state.unpriced > 0) parts.push(`${state.unpriced} unpriced`)
       parts.push(state.routes.join(', '))
       return parts.join(' \u00b7 ')
     }
@@ -114,7 +97,7 @@ window.__ModuleLoader__.load({
             opacity: state === null ? 0.5 : state.unpriced > 0 ? 0.75 : 1,
           },
         },
-        state === null ? '$—' : marker(state) + usd(state.usd),
+        state === null ? '$0.000' : usd(state.usd, state.subscription),
       )
     }
 
