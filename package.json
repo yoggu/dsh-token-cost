@@ -2,7 +2,8 @@
   "name": "dsh-token-cost-estimate",
   "version": "0.1.0",
   "private": true,
-  "description": "Estimated current-session token cost from local pi-ai catalog prices; not a billed amount",
+  "description": "Shows an estimated current-session token cost from local pi-ai catalog prices; this is not a billed amount.",
+  "icon": "./icon.svg",
   "type": "module",
   "license": "MIT",
   "main": "lib/index.js",
@@ -11,13 +12,16 @@
       "default": "./lib/index.js"
     },
     "./client": "./client.js",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./locale/*": "./locale/*"
   },
   "files": [
     "lib",
     "client.js",
     "cordis.patch.yml",
-    "README.md"
+    "README.md",
+    "icon.svg",
+    "locale"
   ],
   "dsh": {
     "bundle": {
