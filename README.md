@@ -1,56 +1,21 @@
 # dsh-token-cost-estimate
 
-Shows the current Session's estimated token cost, as a compact readout among the
-composer's tool-row controls. The estimate comes from local pi-ai catalog prices;
-it is not a billed amount. It follows the pi coding-agent style:
-`$0.000` for a normal route and `$0.000 (sub)` for a subscription route.
+Shows an estimated token cost for the current DSH Web session in the composer. Prices come from the installed pi-ai model catalogs; **this is not a bill**. Subscription routes show `(sub)`, and usage without a matching catalog entry remains unpriced rather than being treated as free.
 
-## What it reports
+## Install from GitHub
 
-The pill uses the published model prices from the installed pi-ai catalogs. For
-each Assistant message it applies the route's input, output, cache-read, and
-cache-write rates to the durable token counts. This is always an estimate, not
-an account charge: it does not contact OpenRouter, resolve an API key, or try
-to settle a generation record.
+```sh
+dsh plugin --profile web add https://github.com/yoggu/dsh-token-cost-estimate.git
+```
 
-A step with no matching provider/model catalog stays unpriced rather than being
-shown as free. The tooltip reports the number of priced and unpriced steps, the
-routes involved, and whether the route is subscription-covered.
+Restart DSH Web if necessary and reload the page. No external price API or separate credentials are needed; the browser reads the local estimate over DSH's authenticated `/api` channel. If catalog discovery fails, `DSH_PI_AI_DATA` can point to the local pi-ai catalog directory.
 
-## Reading the pill
+To uninstall: `dsh plugin --profile web remove dsh-token-cost-estimate`.
 
-| Shown | Meaning |
-| --- | --- |
-| `$0.004` | estimated at pi-ai's published list price |
-| `$0.004 (sub)` | same estimate for a subscription route; not an account charge |
-| `$0.000` | no priced usage yet, or the priced usage rounds below $0.0005 |
+## Limitations
 
-The amount is formatted to three decimal places to match the pi coding agent.
-Hover the pill for the exact interpretation and route details. The readout uses the
-`dsh-token-cost-estimate` CSS tag.
+List prices and actual charges can differ, especially for subscriptions. Routes with custom provider names need a matching catalog-provider mapping in the plugin or remain unpriced.
 
-## Requirements
+## License
 
-No credentials, shell, or network capability is required. The plugin reads the
-installed pi-ai catalogs locally. `DSH_PI_AI_DATA` can override the catalog
-directory when the runtime cannot discover it automatically.
-
-## Known limitations
-
-- A list price is not a charge. On a subscription route the estimate says what
-  the same tokens would cost at list price, while the account may pay through a
-  plan instead.
-- List prices come from the installed pi-ai catalogs, found by searching upward
-  from the running CLI. With no catalog found, usage is shown as unpriced.
-- One model id can be described by many catalog files, because the same model is
-  served by OpenAI, Azure, Copilot, OpenCode, and gateways in between. The
-  catalogs are therefore indexed by provider, then by model id. Nothing is
-  chosen by directory order, so a route cannot be priced from an unrelated
-  provider that happens to sort first.
-- A route is a deployment's own name, while a catalog names the provider that
-  serves it: this deployment's ChatGPT routes `codex-personal` and
-  `codex-business` are both priced by `openai-codex`. That binding lives in the
-  plugin that owns the route, not in the durable log, and is stated explicitly
-  in `CATALOG_PROVIDER_BY_ROUTE`. A route missing from that table is priced only
-  when its name is already a catalog provider name (`openrouter` is); otherwise
-  it remains unpriced.
+MIT; see [LICENSE](LICENSE).
