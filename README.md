@@ -29,12 +29,6 @@ The amount is formatted to three decimal places to match the pi coding agent.
 Hover the pill for the exact interpretation and route details. The readout uses the
 `dsh-token-cost-estimate` CSS tag.
 
-## Runtime compatibility
-
-The package-facing identity is `dsh-token-cost-estimate`. The existing host/browser
-bundle id (`cost-pill`) and API route (`/api/dsh-cost-pill`) remain unchanged as
-runtime contracts, so already-deployed integrations continue to work.
-
 ## Requirements
 
 No credentials, shell, or network capability is required. The plugin reads the

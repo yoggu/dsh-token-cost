@@ -22,11 +22,8 @@ window.__ModuleLoader__.load({
 
     const React = require('react')
 
-    /**
-     * Legacy route retained for runtime compatibility with deployed host bundles.
-     * The package-facing identity is dsh-token-cost-estimate.
-     */
-    const ROUTE = '/api/dsh-cost-pill'
+    /** API route served by the host half. */
+    const TOKEN_COST_ESTIMATE_ROUTE = '/api/dsh-token-cost-estimate'
 
     /** How often the pill re-reads the host's answer. */
     const POLL_MS = 2000
@@ -63,14 +60,14 @@ window.__ModuleLoader__.load({
      * @param props - the slot props, carrying the Session id.
      * @returns the pill element, or null while nothing can be priced.
      */
-    function CostPill(props) {
+    function TokenCostEstimate(props) {
       const [state, setState] = React.useState(null)
       const [note, setNote] = React.useState('starting')
       const sessionId = props.sessionId === undefined ? '' : String(props.sessionId)
       React.useEffect(() => {
         let alive = true
         const tick = () => {
-          fetch(`${ROUTE}?sessionId=${encodeURIComponent(sessionId)}`).then((response) => {
+          fetch(`${TOKEN_COST_ESTIMATE_ROUTE}?sessionId=${encodeURIComponent(sessionId)}`).then((response) => {
             if (!response.ok) throw new Error(String(response.status))
             return response.json()
           }).then((value) => {
@@ -146,7 +143,7 @@ window.__ModuleLoader__.load({
         name: 'conversation.input.right',
         id: 'cost',
         order: 5,
-      }, CostPill))
+      }, TokenCostEstimate))
     }
 
     exports.inject = ['slots']
