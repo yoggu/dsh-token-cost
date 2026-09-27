@@ -7,13 +7,13 @@ Shows an estimated token cost for the current DSH Web session in the composer. P
 Install the tagged GitHub release into your DSH Web profile:
 
 ```sh
-dsh plugin --profile web add 'https://github.com/yoggu/dsh-token-cost-estimate.git#v0.1.1'
+dsh plugin --profile web add 'https://github.com/yoggu/dsh-token-cost-estimate.git#v0.1.2'
 ```
 
 Or download the source and link the local checkout:
 
 ```sh
-git clone --branch v0.1.1 --depth 1 https://github.com/yoggu/dsh-token-cost-estimate.git
+git clone --branch v0.1.2 --depth 1 https://github.com/yoggu/dsh-token-cost-estimate.git
 cd dsh-token-cost-estimate
 dsh plugin --profile web add "link:$(pwd)"
 ```
