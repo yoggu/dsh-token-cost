@@ -1,5 +1,5 @@
 /**
- * Browser half of `dsh-token-cost-estimate`: one readout at the right edge
+ * Browser half of `dsh-token-cost`: one readout at the right edge
  * of the ambient statistics row below the composer.
  *
  * Hand-written in the `window.__ModuleLoader__.load` format — no JSX, no
@@ -12,11 +12,11 @@
  * requests and runs no timer. A key that carries no value reads `undefined`,
  * which is exactly the "nothing can be priced yet" state.
  *
- * @module dsh-token-cost-estimate/client
+ * @module dsh-token-cost/client
  */
 
 window.__ModuleLoader__.load({
-  id: 'dsh-token-cost-estimate',
+  id: 'dsh-token-cost',
   factory: (require) => {
     const module = { exports: {} }
     const exports = module.exports
@@ -53,7 +53,7 @@ window.__ModuleLoader__.load({
     }
 
     /** The projection key the host half registers. */
-    const PROJECTION_KEY = 'dsh-token-cost-estimate.cost'
+    const PROJECTION_KEY = 'dsh-token-cost.cost'
 
     /** Stand-in for a slot context that does not carry the projection hook. */
     const noProjection = () => undefined
@@ -119,7 +119,7 @@ window.__ModuleLoader__.load({
     }
 
     /** Stable class the readout's stylesheet and its width rules address. */
-    const CLASS_NAME = 'dsh-token-cost-estimate'
+    const CLASS_NAME = 'dsh-token-cost'
 
     /**
      * The readout's stylesheet.
@@ -130,8 +130,8 @@ window.__ModuleLoader__.load({
      * price below the stats rather than overlapping controls.
      */
     const STYLESHEET = `
-.dsh-token-cost-estimate{display:inline-flex;align-items:center;box-sizing:border-box;max-width:100%;flex:0 0 auto;white-space:nowrap;color:var(--dsw-alias-label-tertiary);font-family:inherit;font-size:calc(var(--dsh-content-font-size-secondary,13px) - 1px);font-variant-numeric:tabular-nums;line-height:calc(20px + var(--dsh-content-font-delta-secondary,0px));padding:1px 8px}
-@media (max-width:720px){div:has(> [data-slot="conversation.composer.dock"] .dsh-token-cost-estimate){flex-wrap:wrap;gap:0 4px}div:has(> [data-slot="conversation.composer.dock"] .dsh-token-cost-estimate) [data-composer-stats]{flex:0 0 100%;justify-content:center}div:has(> [data-slot="conversation.composer.dock"] .dsh-token-cost-estimate) > :last-child:not([data-slot]){margin-left:auto}.dsh-token-cost-estimate{font-size:12px}}
+.dsh-token-cost{display:inline-flex;align-items:center;box-sizing:border-box;max-width:100%;flex:0 0 auto;white-space:nowrap;color:var(--dsw-alias-label-tertiary);font-family:inherit;font-size:calc(var(--dsh-content-font-size-secondary,13px) - 1px);font-variant-numeric:tabular-nums;line-height:calc(20px + var(--dsh-content-font-delta-secondary,0px));padding:1px 8px}
+@media (max-width:720px){div:has(> [data-slot="conversation.composer.dock"] .dsh-token-cost){flex-wrap:wrap;gap:0 4px}div:has(> [data-slot="conversation.composer.dock"] .dsh-token-cost) [data-composer-stats]{flex:0 0 100%;justify-content:center}div:has(> [data-slot="conversation.composer.dock"] .dsh-token-cost) > :last-child:not([data-slot]){margin-left:auto}.dsh-token-cost{font-size:12px}}
 `
 
     /**

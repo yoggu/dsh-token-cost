@@ -1,4 +1,4 @@
-# dsh-token-cost-estimate
+# dsh-token-cost
 
 Shows an estimated token cost for the current DSH Web session in the composer. Prices come from the installed pi-ai model catalogs; **this is not a bill**. Subscription routes show `(sub)`, and usage without a matching catalog entry remains unpriced rather than being treated as free.
 
@@ -7,14 +7,14 @@ Shows an estimated token cost for the current DSH Web session in the composer. P
 Install the tagged GitHub release into your DSH Web profile:
 
 ```sh
-dsh plugin --profile web add 'https://github.com/yoggu/dsh-token-cost-estimate.git#v0.1.3'
+dsh plugin --profile web add 'https://github.com/yoggu/dsh-token-cost.git#v0.2.0'
 ```
 
 Or download the source and link the local checkout:
 
 ```sh
-git clone --branch v0.1.3 --depth 1 https://github.com/yoggu/dsh-token-cost-estimate.git
-cd dsh-token-cost-estimate
+git clone --branch v0.2.0 --depth 1 https://github.com/yoggu/dsh-token-cost.git
+cd dsh-token-cost
 dsh plugin --profile web add "link:$(pwd)"
 ```
 
@@ -22,7 +22,7 @@ Keep a linked checkout in place while the plugin is installed. Use the profile y
 
 Restart DSH Web if necessary and reload the page. No external price API or separate credentials are needed: the host publishes the estimate as a Session projection and the readout renders it, so the plugin requests nothing and polls nothing. An idle session produces no traffic at all. If catalog discovery fails, `DSH_PI_AI_DATA` can point to the local pi-ai catalog directory.
 
-To uninstall: `dsh plugin --profile web remove dsh-token-cost-estimate`.
+To uninstall: `dsh plugin --profile web remove dsh-token-cost`.
 
 ## Limitations
 

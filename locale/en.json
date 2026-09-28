@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Token Cost Estimate",
+    "title": "Token Cost",
     "description": "Shows an estimated current-session token cost from local pi-ai catalog prices; this is not a billed amount."
   }
 }

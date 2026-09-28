@@ -3,8 +3,8 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import vm from 'node:vm'
 
-const KEY = 'dsh-token-cost-estimate.cost'
-const span = (node) => (typeof node === 'object' && node ? [node, ...node.props.children.flatMap(span)].find(part => typeof part === 'object' && part?.props?.className === 'dsh-token-cost-estimate') : undefined)
+const KEY = 'dsh-token-cost.cost'
+const span = (node) => (typeof node === 'object' && node ? [node, ...node.props.children.flatMap(span)].find(part => typeof part === 'object' && part?.props?.className === 'dsh-token-cost') : undefined)
 const textOf = (node) => typeof node === 'object' && node
   ? node.props.children.map(textOf).filter(part => part !== '').join(' ')
   : String(node ?? '')
