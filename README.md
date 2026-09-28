@@ -20,7 +20,7 @@ dsh plugin --profile web add "link:$(pwd)"
 
 Keep a linked checkout in place while the plugin is installed. Use the profile you actually run if it is not `web`.
 
-Restart DSH Web if necessary and reload the page. No external price API or separate credentials are needed; the browser reads the local estimate over DSH's authenticated `/api` channel. If catalog discovery fails, `DSH_PI_AI_DATA` can point to the local pi-ai catalog directory.
+Restart DSH Web if necessary and reload the page. No external price API or separate credentials are needed: the host publishes the estimate as a Session projection and the readout renders it, so the plugin requests nothing and polls nothing. An idle session produces no traffic at all. If catalog discovery fails, `DSH_PI_AI_DATA` can point to the local pi-ai catalog directory.
 
 To uninstall: `dsh plugin --profile web remove dsh-token-cost-estimate`.
 

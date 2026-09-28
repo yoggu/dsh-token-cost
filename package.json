@@ -35,6 +35,6 @@
     "node": ">=22.19.0"
   },
   "scripts": {
-    "test": "node --test lib/*.test.js"
+    "test": "node --test lib/*.test.js tests/*.test.js"
   }
 }

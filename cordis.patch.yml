@@ -1,8 +1,9 @@
 # dsh-token-cost-estimate bundle layer.
 #
-# One host row. It reads the durable Session event feed, estimates each
-# Assistant message from the local pi-ai catalogs, and serves the running total
-# to its own browser half on an exact HTTP route.
+# One host row. It folds the durable Session event feed, estimates every
+# Assistant settlement from the local pi-ai catalogs, and publishes the running
+# total as a Session projection its own browser half reads. Nothing is polled:
+# the framework pushes a new value only when a settlement changes it.
 - insert:
     - id: token-cost-estimate
       name: 'dsh-token-cost-estimate'

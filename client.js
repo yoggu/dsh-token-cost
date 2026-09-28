@@ -6,9 +6,11 @@
  * bundler — and declared through `exports["./client"]` plus `dsh.client` in
  * package.json, which is how the host discovers and serves a browser bundle.
  *
- * The pill reads its estimate from the exact route the host half registers.
- * It never computes a price itself: the host applies pi-ai's published model
- * rates and reports whether any steps could not be priced.
+ * The readout renders the host's Session projection through the standard
+ * projection hook: the host owns the price, the framework pushes a whole value
+ * whenever a durable settlement changes it, and the readout itself issues no
+ * requests and runs no timer. A key that carries no value reads `undefined`,
+ * which is exactly the "nothing can be priced yet" state.
  *
  * @module dsh-token-cost-estimate/client
  */
@@ -50,12 +52,11 @@ window.__ModuleLoader__.load({
       }}, text), document.body) : null;
     }
 
+    /** The projection key the host half registers. */
+    const PROJECTION_KEY = 'dsh-token-cost-estimate.cost'
 
-    /** API route served by the host half. */
-    const TOKEN_COST_ESTIMATE_ROUTE = '/api/dsh-token-cost-estimate'
-
-    /** How often the pill re-reads the host's answer. */
-    const POLL_MS = 2000
+    /** Stand-in for a slot context that does not carry the projection hook. */
+    const noProjection = () => undefined
 
     /**
      * Render the estimate like pi coding-agent: fixed three decimals and a
@@ -80,37 +81,23 @@ window.__ModuleLoader__.load({
     }
 
     /**
-     * The pill: polls the host route for the current Session.
-     * @param props - the slot props, carrying the Session id.
-     * @returns the pill element, or null while nothing can be priced.
+     * The readout: subscribes to the host's Session projection.
+     *
+     * `steps` counts the settlements behind the number, so a Session that has
+     * priced nothing is shown as unavailable instead of a confident zero.
+     *
+     * @param props - the slot props, carrying the standard projection hook.
+     * @returns the readout element.
      */
     function TokenCostEstimate(props) {
       const anchor = React.useRef(null)
       const tipId = React.useId()
       const [hover, setHover] = React.useState(false)
-      const [state, setState] = React.useState(null)
-      const [note, setNote] = React.useState('starting')
-      const sessionId = props.sessionId === undefined ? '' : String(props.sessionId)
-      React.useEffect(() => {
-        let alive = true
-        const tick = () => {
-          fetch(`${TOKEN_COST_ESTIMATE_ROUTE}?sessionId=${encodeURIComponent(sessionId)}`).then((response) => {
-            if (!response.ok) throw new Error(String(response.status))
-            return response.json()
-          }).then((value) => {
-            if (!alive) return
-            setState(value)
-            setNote(value === null ? `no price yet (session ${sessionId === '' ? 'missing' : sessionId})` : 'ok')
-          }).catch((error) => {
-            if (!alive) return
-            setState(null)
-            setNote(`request failed: ${String(error)}`)
-          })
-        }
-        tick()
-        const handle = window.setInterval(tick, POLL_MS)
-        return () => { alive = false; window.clearInterval(handle) }
-      }, [sessionId])
+      // The hook is a stable framework seat for this component's lifetime; the
+      // fallback keeps a context without it renderable instead of throwing.
+      const useProjection = typeof props.useProjection === 'function' ? props.useProjection : noProjection
+      const projected = useProjection(PROJECTION_KEY)
+      const state = projected !== null && typeof projected === 'object' && Number(projected.steps) > 0 ? projected : null
 
       return React.createElement(
         'span',
