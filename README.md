@@ -4,16 +4,16 @@ Shows **estimated** cost for the current DSH Web session, never an invoice. DSH 
 
 ## Installation
 
-Install the current source from the repository's existing default branch:
+Install the latest tagged GitHub release:
 
 ```sh
-dsh plugin --profile web add 'https://github.com/yoggu/dsh-token-cost.git#master'
+dsh plugin --profile web add 'https://github.com/yoggu/dsh-token-cost.git#v0.2.2'
 ```
 
 Or clone and link a checkout:
 
 ```sh
-git clone https://github.com/yoggu/dsh-token-cost.git
+git clone --branch v0.2.2 --depth 1 https://github.com/yoggu/dsh-token-cost.git
 cd dsh-token-cost
 dsh plugin --profile web add "link:$(pwd)"
 ```
