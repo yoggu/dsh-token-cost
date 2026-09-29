@@ -71,13 +71,9 @@ window.__ModuleLoader__.load({
       return `$${amount.toFixed(3)}${subscription ? ' (sub)' : ''}`
     }
 
-    /**
-     * The tooltip: what the number is made of, and what is still missing.
-     * @param state - the host's report.
-     * @returns the explanation.
-     */
+    /** The short label for the current-session estimate. */
     function detail(state) {
-      return `${state.subscription ? 'Estimated cost · subscription' : 'Estimated cost'}${state.unpriced > 0 ? ' · partial' : ''}`
+      return state.subscription ? 'Estimated cost · subscription' : 'Estimated cost'
     }
 
     /**

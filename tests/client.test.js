@@ -62,7 +62,7 @@ test('the readout subscribes to the host projection and issues no request', () =
   f.unmount()
 })
 
-test('a measured estimate renders list price, subscription marker and detail', () => {
+test('a measured estimate renders price and a short subscription tooltip', () => {
   const report = { usd: 1.2345, priced: 2, unpriced: 0, steps: 2, subscription: true }
   const f = fixture({ projection: report })
   const node = f.render()
@@ -76,12 +76,24 @@ test('a measured estimate renders list price, subscription marker and detail', (
   f.unmount()
 })
 
-test('a partly unpriced session dims the readout and says so', () => {
+test('tooltip omits catalog provenance and detailed caveats', () => {
+  const source = { package: '@earendil-works/pi-ai', version: '0.87.1', catalog: 'openrouter',
+    digest: 'abc123', owner: '@deepseek-ai/dsh-llm-pi-ai', subscription: false,
+    label: 'pi-ai catalog API list-price estimate', count: 2 }
+  const f = fixture({ projection: { usd: 0.5, priced: 2, unpriced: 1, steps: 3,
+    subscription: false, sources: [source] } })
+  const node = f.render()
+  assert.equal(textOf(node), '$0.500')
+  assert.equal(node.props.children[1].props.text, 'Estimated cost')
+  f.unmount()
+})
+
+test('a partly unpriced session dims the readout without extra tooltip detail', () => {
   const f = fixture({ projection: { usd: 0.5, priced: 1, unpriced: 1, steps: 2, subscription: false } })
   const node = f.render()
   assert.equal(textOf(node), '$0.500')
   assert.equal(node.props.style.opacity, 0.75)
-  assert.equal(node.props.children[1].props.text, 'Estimated cost · partial')
+  assert.equal(node.props.children[1].props.text, 'Estimated cost')
   f.unmount()
 })
 

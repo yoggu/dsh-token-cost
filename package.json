@@ -1,6 +1,6 @@
 {
   "name": "dsh-token-cost",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "description": "Shows an estimated current-session token cost from local pi-ai catalog prices; this is not a billed amount.",
   "icon": "./icon.svg",
